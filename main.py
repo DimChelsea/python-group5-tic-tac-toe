@@ -47,7 +47,7 @@ def choose_x_player_pvp() -> int:
     Returns
     -------
     int
-        0 if the first player is "X", 1 if the second, or randomly selected.
+        0 if the first player is "X", 1 if the second, or 3 randomly selected.
     """
     print("\nWho should be \"X\" and start the game?")
     print("1. First Player")
@@ -73,7 +73,7 @@ def choose_symbol_player_vs_computer() -> str:
     Returns
     -------
     str
-        "X" or "O", randomly selected if user inputs "R".
+        "X" or "O" or randomly selected if user inputs "R".
     """
     print("\nDo you want to be \"X\", \"O\", or Random?")
     symbol: str = ""
@@ -84,7 +84,6 @@ def choose_symbol_player_vs_computer() -> str:
         symbol = random.choice(["X", "O"])
 
     return symbol
-
 
 def main() -> None:
     """
@@ -106,7 +105,7 @@ def main() -> None:
         x_player_index : int = choose_x_player_pvp()
 
         players : list[dict[str]] = [
-            {"name": player1_name, "symbol": "X" if x_player_index == 0 else "O"},
+            {"name": player1_name, "symbol": "X" if x_player_index == 0 else "O"}, #dictionary comprehension
             {"name": player2_name, "symbol": "O" if x_player_index == 0 else "X"}
         ]
 
@@ -138,20 +137,21 @@ def main() -> None:
                         break
                     if check_draw(board):
                         display_board(board)
-                        print("\n🤝 It's a draw! Well played both!")
+                        print("\n🤝 It's a draw! Well played player 1 and 2!")
                         break
 
-                current_player : str = switch_player(current_player, players)
+                current_player = switch_player(current_player, players)
 
-            play_again : str = input("\n🔁 Do you want to play again? (y/n): ").strip().lower()
+            play_again : str = input("\n🔁 Do you want to play again? (y/any key to exit): ").strip().lower()
             if play_again != "y":
                 print("\nThanks for playing! Goodbye! 👋")
                 break
+            
 
     else:  # Player vs Computer Mode
         player_name : str = get_player_info(1)
         human_symbol : str = choose_symbol_player_vs_computer()
-        computer_symbol : str = "O" if human_symbol == "X" else "X"
+        computer_symbol : str = "O" if human_symbol == "X" else "X" #tenary conditional expresion
 
         if human_symbol == "X":
             current_player : str = "human"
@@ -197,7 +197,7 @@ def main() -> None:
                         print("\n🤝 It's a draw! Well played!")
                         break
 
-                current_player : str = "computer" if current_player == "human" else "human"
+                current_player = "computer" if current_player == "human" else "human"
 
             play_again = input("\n🔁 Do you want to play again? (y/n): ").strip().lower()
             if play_again != "y":
