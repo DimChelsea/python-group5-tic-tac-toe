@@ -105,7 +105,7 @@ def main() -> None:
 
         x_player_index : int = choose_x_player_pvp()
 
-        players : list[dict] = [
+        players : list[dict[str]] = [
             {"name": player1_name, "symbol": "X" if x_player_index == 0 else "O"},
             {"name": player2_name, "symbol": "O" if x_player_index == 0 else "X"}
         ]
@@ -116,9 +116,7 @@ def main() -> None:
             current_player : dict = players[x_player_index]
 
             while True:
-                position_board : list[list[str]] = create_position_board(board)
-                display_board(position_board)
-
+                display_board(board)
                 print(f"\n{current_player["name"]}'s turn ({current_player["symbol"]})")
 
                 try:
@@ -135,12 +133,11 @@ def main() -> None:
                 if move_count >= 5:
                     winning_line = check_win(board, current_player["symbol"])
                     if winning_line:
-                        final_board : list[list[str]] = create_position_board(board)
-                        display_board(final_board)
+                        display_board(board)
                         print(f"\n🎉 {current_player["name"]} ({current_player["symbol"]}) wins! 🎉")
                         break
                     if check_draw(board):
-                        display_board(create_position_board(board))
+                        display_board(board)
                         print("\n🤝 It's a draw! Well played both!")
                         break
 
@@ -168,9 +165,7 @@ def main() -> None:
             move_count : int = 0
 
             while True:
-                position_board : list[list[str]] = create_position_board(board)
-                display_board(position_board)
-
+                display_board(board)
                 if current_player == "human":
                     print(f"\n{player_name}'s turn ({human_symbol})")
                     try:
@@ -190,8 +185,7 @@ def main() -> None:
                     symbol : str = human_symbol if current_player == "human" else computer_symbol
                     winning_line: bool = check_win(board, symbol)
                     if winning_line:
-                        final_board : list[list[str]] = create_position_board(board)
-                        display_board(final_board)
+                        display_board(board)
                         if current_player == "human":
                             print(f"\n🎉 {player_name} wins! 🎉")
                         else:
@@ -199,7 +193,7 @@ def main() -> None:
                         break
 
                     if check_draw(board):
-                        display_board(create_position_board(board))
+                        display_board(board)
                         print("\n🤝 It's a draw! Well played!")
                         break
 
