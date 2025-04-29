@@ -1,4 +1,4 @@
-# logic.py
+"""" logic.py"""
 # This file contains all the game logic functions.
 # It checks for win conditions, manages turns, validates moves, and handles game flow.
 # Functions include checking for a winner, a draw, and making moves.
@@ -57,7 +57,7 @@ def check_draw(board: list[list[str]]) -> bool:
         lines.append([board[row][col] for row in range(3)])
 
     # adds diagonals to 
-    lines.append([board[i][i] for i in range(3)])
+    lines.append([board[i][i] for i in range(3)]) #list comprehension
     lines.append([board[i][2 - i] for i in range(3)])
 
     for line in lines:
@@ -83,7 +83,7 @@ def make_move(board: list[list[str]], position: int, symbol: str) -> bool:
         True if the move is valid and was made; otherwise False.
     """
     if position < 1 or position > 9:
-        return False
+        raise ValueError
     index : int = position - 1
     row : int = index // 3
     col : int = index % 3
@@ -110,7 +110,7 @@ def get_available_moves(board: list[list[str]]) -> list[int]:
     return [row * 3 + col + 1 for row in range(3) for col in range(3) if board[row][col] == " "]
 
 
-def switch_player(current_player: str, players: list[dict[str]]) -> str:
+def switch_player(current_player: str, players: list[dict[str,str]]) -> dict:
     """
     Switches to the other player.
 
