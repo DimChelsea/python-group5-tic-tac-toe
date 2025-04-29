@@ -1,7 +1,13 @@
+""" main.py"""
+# This file contains the main script that runs the game.
+# It integrates the game logic and the display functions.
+# It also handles user input, game modes (Player vs Player or Player vs Computer),
+# and the replay/quit system.
+
 import sys
 import random
 from display import display_board
-from logic import *
+from logic import check_draw, check_win, make_move, switch_player, create_empty_board, computer_move
 
 
 def get_player_info(player_num: int) -> str:
