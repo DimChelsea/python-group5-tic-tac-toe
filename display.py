@@ -33,7 +33,7 @@ def display_board(game_board: list[list[str]]) -> None:
         print(" | ".join(row_display))
         if row < 2:
             print("--+---+--")
-            
+
 if __name__ == "__main__":
     board : list = [
             ["X", "X", " "],
@@ -41,4 +41,4 @@ if __name__ == "__main__":
             [" ", "O", "X"]
         ]
 
-    display_board(board)    
+    display_board(board)

@@ -50,7 +50,7 @@ def check_draw(board: list[list[str]]) -> bool:
     bool
         True if no winning moves are left for either player; otherwise False.
     """
-    lines = board[:] # adds rows to lines
+    lines : list[list[str]]= board[:] # adds rows to lines
 
     # adds columns to lines
     for col in range(3):
@@ -84,14 +84,14 @@ def make_move(board: list[list[str]], position: int, symbol: str) -> bool:
     """
     if position < 1 or position > 9:
         return False
-
-    row : int = (position - 1) // 3
-    col : int = (position - 1) % 3
+    index : int = position - 1
+    row : int = index // 3
+    col : int = index % 3
 
     if board[row][col] == " ":
         board[row][col] = symbol
         return True
-
+    print("❌ can't play in a taken spot!")
     return False
 
 
@@ -107,17 +107,20 @@ def get_available_moves(board: list[list[str]]) -> list[int]:
     list[int]
         List of positions (1–9) that are currently unoccupied.
     """
-    return [r * 3 + c + 1 for r in range(3) for c in range(3) if board[r][c] == " "]
+    return [row * 3 + col + 1 for row in range(3) for col in range(3) if board[row][col] == " "]
 
 
-def switch_player(current_player: str, players: tuple[str, str]) -> str:
+def switch_player(current_player: str, players: list[dict[str]]) -> str:
     """
     Switches to the other player.
 
     current_player
         The current player's symbol.
     players
-        A tuple of two player symbols (e.g., ("X", "O")).
+        A list of player data (dictionaries) (e.g., [
+            {"name": player1_name, "symbol": "X"},
+            {"name": player2_name, "symbol": "O"}
+        ]).
 
     Returns
     -------
@@ -137,30 +140,6 @@ def create_empty_board() -> list[list[str]]:
         A 3x3 board filled with spaces.
     """
     return [[" " for _ in range(3)] for _ in range(3)]
-
-
-def create_position_board(board: list[list[str]]) -> list[list[str]]:
-    """
-    Returns a version of the board showing position numbers in empty spots.
-
-    board
-        The current game board.
-
-    Returns
-    -------
-    list[list[str]]
-        A board with numbers in place of empty cells.
-    """
-    new_board : list = []
-    pos : int = 1
-    for row in board:
-        new_row  : list = []
-        for cell in row:
-            new_row.append(str(pos) if cell == " " else cell)
-            pos += 1
-        new_board.append(new_row)
-    return new_board
-
 
 def computer_move(board: list[list[str]], computer_symbol: str, human_symbol: str) -> None:
     """
@@ -184,29 +163,31 @@ def computer_move(board: list[list[str]], computer_symbol: str, human_symbol: st
     time.sleep(1.5)
 
     for move in get_available_moves(board):
-        temp_board : list = [row[:] for row in board]
+        temp_board : list = [row[:] for row in board] # making a copy of the original board
+        # checks if move would be a win for the computer on the copy board and makes the move if it will be a win. 
         if make_move(temp_board, move, computer_symbol) and check_win(temp_board, computer_symbol):
             make_move(board, move, computer_symbol)
-            return
+            return 
 
     for move in get_available_moves(board):
-        temp_board : list = [row[:] for row in board]
+        temp_board : list = [row[:] for row in board]  # making a copy of the original board
+        # checks if move would be a win for the human on the copy board and blocks the space if it will be a win. 
         if make_move(temp_board, move, human_symbol) and check_win(temp_board, human_symbol):
             make_move(board, move, computer_symbol)
             return
 
-    if board[1][1] == " ":
+    if board[1][1] == " ": # makes the computer play at the centre if its empty
         make_move(board, 5, computer_symbol)
         return
 
     corners : list = [1, 3, 7, 9]
     random.shuffle(corners)
-    for move in corners:
+    for move in corners: # makes a random corner move
         if move in get_available_moves(board) and make_move(board, move, computer_symbol):
             return
 
     sides : list = [2, 4, 6, 8]
     random.shuffle(sides)
-    for move in sides:
+    for move in sides: # makes a random side move
         if move in get_available_moves(board) and make_move(board, move, computer_symbol):
             return
